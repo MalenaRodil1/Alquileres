@@ -10,8 +10,7 @@ tel  INT NOT NULL UNIQUE);
 CREATE TABLE tipo_inmueble(
 Id_tipo_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
 tipo_vivienda VARCHAR(30) NOT NULL,
-capacidad INT NOT NULL,
-n_habitaciones INT NOt NULL);
+capacidad INT NOT NULL);
 
 CREATE TABLE inmueble(
 Id_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
@@ -70,7 +69,7 @@ CONSTRAINT FOREIGN KEY (Id_empleado) REFERENCES empleado (Id_empleado)
 
 CREATE TABLE contrato(
 Id_contrato INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
-fecha_alquiler DATETIME NOT NULL,
+fecha DATETIME NOT NULL,
 precio DECIMAL(10,2) NOT NULL,
 Id_emp_sucursal INT NOT NULL,
 Id_inmueble_duenio INT NOT NULL,
