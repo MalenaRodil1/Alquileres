@@ -1,0 +1,81 @@
+CREATE SCHEMA  alquileres_temp;
+
+CREATE TABLE cliente(
+Id_cliente INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+domicilio VARCHAR(50) NOT NULL UNIQUE ,
+tel  INT NOT NULL UNIQUE);
+
+CREATE TABLE tipo_inmueble(
+Id_tipo_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+tipo_vivienda VARCHAR(30) NOT NULL,
+capacidad INT NOT NULL,
+n_habitaciones INT NOt NULL);
+
+CREATE TABLE inmueble(
+Id_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+precio DECIMAL(10,2) NOT NULL,
+direccion VARCHAR(50) NOT NULL,
+Id_tipo_inmueble INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_tipo_inmueble) REFERENCES tipo_inmueble (Id_tipo_inmueble)
+);
+
+CREATE TABLE duenio(
+Id_duenio INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+ing_monetario DECIMAL(10,2) NOT NULL,
+tel  INT NOT NULL UNIQUE);
+
+CREATE TABLE sucursal(
+Id_sucursal INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL UNIQUE,
+direccion VARCHAR(50) NOT NULL UNIQUE)
+;
+CREATE TABLE puesto(
+Id_puesto INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+puesto_trabajo VARCHAR(30) NOT NULL);
+ 
+ CREATE TABLE metodo_pago(
+Id_met_pago INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+metodo_pago VARCHAR(30) NOT NULL);
+ 
+CREATE TABLE inmueble_duenio(
+Id_inmueble_duenio INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+Id_inmueble INT NOT NULL,
+Id_duenio INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_inmueble) REFERENCES inmueble (Id_inmueble),
+CONSTRAINT FOREIGN KEY (Id_duenio) REFERENCES duenio (Id_duenio)
+);
+
+CREATE TABLE empleado(
+Id_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+domicilio VARCHAR(50) NOT NULL UNIQUE ,
+tel  INT NOT NULL UNIQUE,
+salario DECIMAL(10,2) NOT NULL,
+Id_puesto INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_puesto) REFERENCES puesto (Id_puesto)
+);
+
+CREATE TABLE empleado_sucursal(
+Id_emp_sucursal INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+Id_sucursal INT NOT NULL,
+Id_empleado INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_sucursal) REFERENCES sucursal (Id_sucursal),
+CONSTRAINT FOREIGN KEY (Id_empleado) REFERENCES empleado (Id_empleado)
+);
+
+CREATE TABLE contrato(
+Id_contrato INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+fecha_alquiler DATETIME NOT NULL,
+precio DECIMAL(10,2) NOT NULL,
+Id_emp_sucursal INT NOT NULL,
+Id_inmueble_duenio INT NOT NULL,
+Id_met_pago INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_emp_sucursal) REFERENCES empleado_sucursal(Id_emp_sucursal),
+CONSTRAINT FOREIGN KEY (id_inmueble_duenio) REFERENCES inmueble_duenio (Id_inmueble_duenio),
+CONSTRAINT FOREIGN KEY (Id_met_pago) REFERENCES metodo_pago (Id_met_pago))
+;
