@@ -1,0 +1,207 @@
+CREATE SCHEMA  alquileres_temp;
+
+CREATE TABLE cliente(
+Id_cliente INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+domicilio VARCHAR(50) NOT NULL UNIQUE ,
+tel  INT NOT NULL UNIQUE);
+
+CREATE TABLE tipo_inmueble(
+Id_tipo_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+tipo_vivienda VARCHAR(30) NOT NULL,
+capacidad INT NOT NULL,
+n_habitaciones INT NOt NULL);
+
+CREATE TABLE inmueble(
+Id_inmueble INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+precio DECIMAL(10,2) NOT NULL,
+direccion VARCHAR(50) NOT NULL,
+Id_tipo_inmueble INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_tipo_inmueble) REFERENCES tipo_inmueble (Id_tipo_inmueble)
+);
+
+CREATE TABLE duenio(
+Id_duenio INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+ing_monetario DECIMAL(10,2) NOT NULL,
+tel  INT NOT NULL UNIQUE);
+
+CREATE TABLE sucursal(
+Id_sucursal INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL UNIQUE,
+direccion VARCHAR(50) NOT NULL UNIQUE)
+;
+CREATE TABLE puesto(
+Id_puesto INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+puesto_trabajo VARCHAR(30) NOT NULL);
+ 
+ CREATE TABLE metodo_pago(
+Id_met_pago INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+metodo_pago VARCHAR(30) NOT NULL);
+ 
+CREATE TABLE inmueble_duenio(
+Id_inmueble_duenio INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+Id_inmueble INT NOT NULL,
+Id_duenio INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_inmueble) REFERENCES inmueble (Id_inmueble),
+CONSTRAINT FOREIGN KEY (Id_duenio) REFERENCES duenio (Id_duenio)
+);
+
+CREATE TABLE empleado(
+Id_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+domicilio VARCHAR(50) NOT NULL UNIQUE ,
+tel  INT NOT NULL UNIQUE,
+salario DECIMAL(10,2) NOT NULL,
+Id_puesto INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_puesto) REFERENCES puesto (Id_puesto)
+);
+
+CREATE TABLE empleado_sucursal(
+Id_emp_sucursal INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE ,
+Id_sucursal INT NOT NULL,
+Id_empleado INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_sucursal) REFERENCES sucursal (Id_sucursal),
+CONSTRAINT FOREIGN KEY (Id_empleado) REFERENCES empleado (Id_empleado)
+);
+
+CREATE TABLE contrato(
+Id_contrato INT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
+fecha_alquiler DATE NOT NULL,
+precio DECIMAL(10,2) NOT NULL,
+Id_emp_sucursal INT NOT NULL,
+Id_inmueble_duenio INT NOT NULL,
+Id_met_pago INT NOT NULL,
+CONSTRAINT FOREIGN KEY (Id_emp_sucursal) REFERENCES empleado_sucursal(Id_emp_sucursal),
+CONSTRAINT FOREIGN KEY (id_inmueble_duenio) REFERENCES inmueble_duenio (Id_inmueble_duenio),
+CONSTRAINT FOREIGN KEY (Id_met_pago) REFERENCES metodo_pago (Id_met_pago))
+;
+ 
+INSERT INTO cliente (Id_cliente, domicilio, nombre,apellido, tel) VALUES
+(1, '08660 Fair Oaks Plaza', 'Cecilius',' Larway',53323418),
+(2, '75106 Thierer Road','Sherilyn' ,'Briggs',81853564),
+(3,'46991 Mandrake Trail','Esther' ,'McLoney',61490253),
+(4, '73551 Leroy Lane','Delaney ','Meys',57653685),
+(5,'6 Hauk Road','Petronille' ,'Labrow',50692545),
+(6, '92865 Corben Place','Carny', 'Coveney',15447092),
+(7,'8 Rigney Plaza','Sheilah' ,'Pride',30497077),
+(8,'802 Iowa Plaza','Gary' ,'Pantin',79964413),
+(9,'9413 Weeping Birch Way','Rodi', 'Stammer',33618439),
+(10,'74273 Porter Lane','Kath' ,'Dee',19285731)
+;
+INSERT INTO tipo_inmueble (Id_tipo_inmueble, tipo_vivienda,capacidad, n_habitaciones)
+ VALUES
+(1, 'Departamento', 4, 3),
+(2, 'Chalet',7, 4), 
+(3, 'Casa',10 ,5),
+(4, 'Departamento',2, 1),
+(5, 'Casa',6, 4),
+(6, 'Departamento',6, 3),
+(7, 'Casa',5, 2),
+(8, 'Casa',12, 8),
+(9, 'Chalet',8, 3),
+(10, 'Departamento',3, 1)
+;
+
+INSERT INTO inmueble (Id_inmueble, direccion,precio, Id_tipo_inmueble)
+VALUE
+(1, '772 Forest Court ',560000, 1),
+(2, '988 Northview Point ',780000 ,2),
+(3,'9915 Sachtjen Street ' ,3450000 ,3),
+(4, '021 Cordelia Pass ',908900,4),
+(5,'439 Union Place ',756463, 5),
+(6, '67652 Shasta Pass ',645789,6),
+(7,'365 Sunnyside Pass ',900000 ,7),
+(8,'4 Kipling Park ',745600,8),
+(9,'27952 Bowman ',647383,9),
+(10,'052 Logan Parkway ',900345, 10)
+;
+INSERT INTO duenio( Id_duenio ,nombre ,apellido,tel ,ing_monetario)
+VALUE
+(1,'Devinne','Benbrick',50359994,56000000),
+(2,'Bo','Borel' ,51639457,78000000),
+(3, 'Edi','Conaghan' ,55111664,3450000.00),
+(4,'Sarita','Oubridge', 24049421,908900.00),
+(5,'Guthrey','Paver' ,44683282,756463.00),
+(6,'Estrella','Epelett', 82876722,645789.00),
+(7,'Christophe','Vallens', 17824394,900000.00 ),
+(8,'Caddric','Peschmann',52447093,745600.00),
+(9,'Salomone','Seth',39519649,647383.00),
+(10,'Ros','Ormesher', 95838214,900345.00) ;
+
+INSERT INTO  sucursal(Id_sucursal,nombre,direccion)
+VALUE
+(1, 'Inmobiliaria_Lavanda_Centro', '63 Grim Trail'),
+(2, ' Inmobiliaria_Lavanda_Sur' ,'76 Anthes Way '),
+(3,' Inmobiliaria_Lavanda_Norte' ,'4 Lakewood Road ')
+;
+
+INSERT INTO puesto( Id_puesto ,puesto_trabajo )
+VALUE 
+(1, 'Martillero'),
+(2, ' Atencion_publico ');
+
+INSERT INTO metodo_pago ( Id_met_pago ,metodo_pago )
+VALUE 
+(1, 'deposito'),
+(2, ' cheque')
+;
+
+INSERT INTO inmueble_duenio(
+Id_inmueble_duenio ,Id_inmueble ,Id_duenio )
+VALUE 
+(11, 1,1),
+(12, 2,2),
+(13, 3,3),
+(14, 4,4),
+(15, 5,5),
+(16, 6,6),
+(17, 7,7),
+(18, 8,8),
+(19, 9,9),
+(20, 10,10);
+
+INSERT INTO empleado (Id_empleado , domicilio, nombre ,apellido , tel ,salario,Id_puesto )
+VALUE
+(1,'4 Marquette Alley','Goldia','Rabbitt' ,29135437,70000,1),
+(2,'3233 Northview Pass','Claribel','Cavalier',78744514,70000,1),
+(3,'2167 Michigan Center','Vladamir','Palfreyman', 79526211,50000,2),
+(4,'237 Gateway Center','Britni','Watkins', 32254583, 50000,2),
+(5,'2258 Dakota Point','Cynthia','Fairchild', 22148484, 50000,2),
+(6, '5900 Jenifer Avenue','Ibbie','Ondracek', 38419957, 50000,2),
+(7, '2926 Waxwing Hill','Ianthe','Foxen',35291479, 50000,2),
+(8,'306 Lukken Avenue','Myra','Vanyatin',38285336, 50000,2),
+(9,'534 Eliot Crossing','Trenton','Adamovsky', 13764048, 70000,1),
+(10,' 1299 Sullivan Place','Gardner','Longs',29115454, 70000,1)
+;
+
+INSERT INTO empleado_sucursal(
+Id_emp_sucursal, Id_sucursal ,Id_empleado)
+VALUE 
+(1, 1, 1),
+(2,1,2),
+(3,1,3),
+(4,2,4),
+(5,2,9),
+(6,2,5),
+(7,3,6),
+(8,3,7),
+(9,3,8),
+(10,3,10)
+;
+
+INSERT INTO contrato(
+Id_contrato ,fecha_alquiler,precio ,Id_emp_sucursal ,Id_inmueble_duenio, Id_met_pago )
+VALUE
+(1,'2023-05-15',560000,1,1,1),
+(2, '2023-05-29',780000, 2,2,1)
+(3, '2023-05-29',3450000, 3,3,1)
+(4, '2023-05-29',908900, 4,4,1)
+(5, '2023-05-29',756463, 5,5,2)
+(6, '2023-05-29',645789, 6,6,2)
+(7, '2023-05-29',900000, 7,7,1)
+(8, '2023-05-29',745600, 8,8,2)
+(9, '2023-05-29',647383, 9,9,2)
+(10, '2023-05-29',900345, 10,10,1)
